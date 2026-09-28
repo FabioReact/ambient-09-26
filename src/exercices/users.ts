@@ -3,7 +3,7 @@ const users = [
 		id: '1',
 		name: 'Arya',
 		house: 'Stark',
-		img: 'aria.jpg'
+		img: 'https://raw.githubusercontent.com/FabioReact/exercice-react/refs/heads/main/public/aria.jpg'
 	},{
 		id: '2',
 		name: 'Sansa',

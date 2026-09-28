@@ -1,27 +1,27 @@
 type AvatarProps = {
-
+    source: string
+    alternative?: string
 }
 
-const Avatar = (props: AvatarProps) => {
+const Avatar = ({ alternative, source }: AvatarProps) => {
 	return (
-		<img src="" alt="Profil of" />
+		<img src={source} alt={`Profil of ${alternative}`} />
 	)
 }
 
 type UserCardProps = {
-    prop1: string,
-    prop2: number,
-    prop3: boolean,
-    optionalprop?: string[],
+    name: string
+    house: string
+    image: string
 }
 
-const UserCard = (props: UserCardProps) => {
+const UserCard = ({ name, house, image }: UserCardProps) => {
 	return (
 		<div className="card">
-			<Avatar />
+			<Avatar source={image} alternative={name} />
 			<div>
-				<p>Prénom: </p>
-				<p>House: </p>
+				<p>Prénom: {name}</p>
+				<p>House: {house}</p>
 			</div>
 		</div>
 	)
