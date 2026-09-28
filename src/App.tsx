@@ -1,9 +1,11 @@
+import { BrowserRouter } from 'react-router';
+import AppRoutes from './routes';
+
 function App() {
   return (
-    <>
-      <h1>Fabio</h1>
-      <h2>Special Font</h2>
-    </>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 
