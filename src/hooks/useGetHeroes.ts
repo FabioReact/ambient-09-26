@@ -1,9 +1,9 @@
 // On va créer notre propre custom hook
 // Va nous servir à centraliser la logique (d'un appel, d'un traitement...) de plusieurs hook react
 
-import { useEffect, useState } from "react";
-import type { Hero } from "../types/hero";
-import { getHeroes } from "../api/heroes";
+import { useEffect, useState } from 'react';
+import type { Hero } from '../types/hero';
+import { getHeroesByFirstLetter } from '../api/heroes';
 
 export const useGetHeroes = () => {
   const [heroes, setHeroes] = useState<Hero[]>([]);
@@ -12,7 +12,7 @@ export const useGetHeroes = () => {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    getHeroes()
+    getHeroesByFirstLetter('A')
       .then((data) => {
         setHeroes(data);
       })
@@ -25,10 +25,28 @@ export const useGetHeroes = () => {
       });
   }, []);
 
-    return {
-        heroes,
-        isLoading,
-        isError,
-        error,
+  const refetch = async (letter: string) => {
+    setIsError(false); // state update
+    setIsLoading(true);
+    setError('');
+    setHeroes([]);
+
+    try {
+      const data = await getHeroesByFirstLetter(letter);
+      if (data) setHeroes(data);
+    } catch (error) {
+      setIsError(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  return {
+    heroes,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  };
 };
