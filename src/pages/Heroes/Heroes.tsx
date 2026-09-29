@@ -3,6 +3,8 @@ import { useGetHeroes } from '@/hooks/useGetHeroes';
 import { useState } from 'react';
 import { generateAlphabet } from './utils';
 import { Button } from '@/components/ui/button';
+import { useQuery } from '@tanstack/react-query';
+import { getHeroesByFirstLetter } from '@/api/heroes';
 
 const Skeleton = () => {
   return (
@@ -23,12 +25,17 @@ const Skeleton = () => {
 const alphabet = generateAlphabet();
 
 const Heroes = () => {
-  const { heroes, isLoading, isError, error, refetch } = useGetHeroes();
   const [selectedLetter, setSelectedLetter] = useState('A');
+
+  // const { heroes, isLoading, isError, error, refetch } = useGetHeroes();
+  const { data: heroes, isError, isLoading, error, refetch } = useQuery({
+    queryKey: ['heroes', selectedLetter], // heroes/A, heroes/B
+    queryFn: () => getHeroesByFirstLetter(selectedLetter)
+  })
 
   const onClickHandler = (letter: string) => {
     setSelectedLetter(letter); // state update
-    refetch(letter);
+    refetch();
   };
 
   return (
@@ -48,11 +55,11 @@ const Heroes = () => {
         ))}
       </ul>
       {isLoading && <Skeleton />}
-      {isError && <p className="text-red-500 text-sm">An error occured... Reason: {error}</p>}
-      {heroes.length === 0 && !isLoading && !isError && 'No results'}
+      {isError && <p className="text-red-500 text-sm">An error occured... Reason: {error.message}</p>}
+      {heroes?.length === 0 && !isLoading && !isError && 'No results'}
       <section className="flex justify-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-5">
-          {heroes.map((hero) => (
+          {heroes?.map((hero) => (
             <HeroCard key={hero.id} hero={hero} />
           ))}
         </div>
