@@ -39,17 +39,20 @@ const Heroes = () => {
   };
 
   return (
-    <section>
-      <ul className="flex justify-center gap-4 my-4">
-        {alphabet.map((l) => (
-          <li key={l}>
+    <section className='space-y-8'>
+      <div className='space-y-2 text-center'>
+        <p className='text-sm font-semibold tracking-[0.2em] text-primary uppercase'>Directory</p>
+        <h1 className='text-3xl font-semibold tracking-tight sm:text-4xl'>Explore heroes</h1>
+        <p className='text-muted-foreground'>Choose an initial to browse the roster.</p>
+      </div>
+      <ul className='flex justify-center gap-1.5 border rounded-xl shadow-sm'>
+        {alphabet.map((letter) => (
+          <li key={letter}>
             <Button
-              variant={selectedLetter === l ? 'default' : 'ghost'}
-              onClick={() => {
-                onClickHandler(l);
-              }}
+              variant={selectedLetter === letter ? 'default' : 'ghost'}
+              onClick={() => onClickHandler(letter)}
             >
-              {l}
+              {letter}
             </Button>
           </li>
         ))}

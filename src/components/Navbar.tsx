@@ -9,6 +9,8 @@ const getActiveClassNames = ({ isActive }: NavLinkRenderProps) => {
 const links = [
   { to: "/", label: "Home" },
   { to: "/heroes", label: "Heroes" },
+  { to: "/search", label: "Search" },
+  { to: "/register", label: "Register" },
   { to: "/exercices", label: "Exercices" },
 ]
 

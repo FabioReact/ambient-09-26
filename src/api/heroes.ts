@@ -24,3 +24,15 @@ export const getHeroesByFirstLetter = async (letter: string): Promise<Hero[]> =>
       return data;
     });
 };
+
+export const getHeroesByCriteria = async ({ name, alignment, gender }: { name: string, alignment: string, gender: string }): Promise<Hero[]> => {
+  if (!name && !alignment && !gender) return [];
+  const params = new URLSearchParams();
+  if (name) params.set('name_like', name);
+  if (alignment) params.set('biography.alignment_like', alignment);
+  if (gender) params.set('appearance.gender_like', gender);
+  const queryString = params.toString();
+  const response = await fetch(`http://localhost:3001/heroes?${queryString}`);
+  if (!response.ok) throw new Error('Failed to search heroes');
+  return response.json();
+};
