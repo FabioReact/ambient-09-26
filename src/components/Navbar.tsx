@@ -11,6 +11,7 @@ const links = [
   { to: "/heroes", label: "Heroes" },
   { to: "/search", label: "Search" },
   { to: "/register", label: "Register" },
+  { to: "/profile", label: "Profile" },
   { to: "/exercices", label: "Exercices" },
 ]
 

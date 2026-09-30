@@ -1,14 +1,24 @@
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
-import type { Hero } from '@/types/hero'
-import { Link } from 'react-router'
-import { Button } from './ui/button'
-import { Badge } from './ui/badge'
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import type { Hero } from '@/types/hero';
+import { Link } from 'react-router';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { useSquadContext } from '@/context/squad-context';
 
 type HeroCardProps = {
-  hero: Hero
-}
+  hero: Hero;
+};
+
+// Je dois ajouter un hero à la squad
+// Une squad doit avoir 3 héros maximum, au dela, il m'est impossible d'en ajouter plus
+// Si un héro est déjà ajouter, je ne peux pas l'ajouter une deuxieme fois, en rechanche, je dois pouvoir le retirer
+// La squad doit etre visible dans la page profil
 
 const HeroCard = ({ hero }: HeroCardProps) => {
+  const { squad, addToSquad, removeFromSquad } = useSquadContext();
+  const isInSquad = squad.some((squadHero) => squadHero.id === hero.id);
+  const isFull = squad.length === 3;
+
   const stats = [
     {
       label: 'INT',
@@ -46,45 +56,47 @@ const HeroCard = ({ hero }: HeroCardProps) => {
       className:
         'border-orange-200 bg-orange-100 text-orange-700 dark:border-orange-900 dark:bg-orange-950 dark:text-orange-300',
     },
-  ]
+  ];
 
   return (
-    <Card className='w-full max-w-xs gap-0 overflow-hidden py-0 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl'>
-      <div className='relative h-80 overflow-hidden bg-muted'>
+    <Card className="w-full max-w-xs gap-0 overflow-hidden py-0 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl">
+      <div className="relative h-80 overflow-hidden bg-muted">
         <img
-          className='absolute top-1/2 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover transition-transform duration-500 group-hover/card:scale-105'
+          className="absolute top-1/2 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover transition-transform duration-500 group-hover/card:scale-105"
           src={hero.image.url}
           alt={`Illustration of ${hero.biography['full-name'] || hero.name}`}
         />
       </div>
-      <CardHeader className='pt-4'>
-        <CardTitle className='text-lg'>
-          <Link to={String(hero.id)} className='transition-colors hover:text-primary'>
+      <CardHeader className="pt-4">
+        <CardTitle className="text-lg">
+          <Link to={String(hero.id)} className="transition-colors hover:text-primary">
             {hero.name}
           </Link>
-          <span className='ml-1.5 text-sm font-normal text-muted-foreground'>#{hero.id}</span>
+          <span className="ml-1.5 text-sm font-normal text-muted-foreground">#{hero.id}</span>
         </CardTitle>
         <CardDescription>{hero.biography['full-name'] || 'Unknown identity'}</CardDescription>
-        <CardAction>
-          None
-        </CardAction>
+        <CardAction>None</CardAction>
       </CardHeader>
-      <CardContent className='flex flex-wrap gap-1.5 border-t mt-3 py-3'>
+      <CardContent className="flex flex-wrap gap-1.5 border-t mt-3 py-3">
         {stats.map(({ label, value, className }) => (
-          <Badge key={label} variant='outline' className={className}>
+          <Badge key={label} variant="outline" className={className}>
             {label} {value}
           </Badge>
         ))}
       </CardContent>
-      <CardContent className='border-t py-3'>
-        <Button
-          className='w-full cursor-pointer'
-        >
-            None
-        </Button>
+      <CardContent className="border-t py-3">
+        {isInSquad ? (
+          <Button className="w-full cursor-pointer" variant="secondary" onClick={() => removeFromSquad(hero.id)}>
+            Remove from Squad
+          </Button>
+        ) : (
+          <Button className="w-full cursor-pointer" onClick={() => addToSquad(hero)} disabled={isFull}>
+            Add to Squad
+          </Button>
+        )}
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default HeroCard
+export default HeroCard;

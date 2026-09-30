@@ -8,6 +8,8 @@ import { Search } from './pages/Search';
 import { LearningEffect } from './learning/LearningEffect';
 import Counter from './exercices/Counter';
 import { Register } from './pages/Register/Register';
+import { Profile } from './pages/Profile/Profile';
+import { LearningRef } from './learning/LearningRef';
 
 const AppRoutes = () => {
   return (
@@ -18,9 +20,13 @@ const AppRoutes = () => {
         <Route path="/heroes" element={<Heroes />} />
         <Route path="/search" element={<Search />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/effect" element={<LearningEffect />} />
-        <Route path="/state" element={<LearningState />} />
-        <Route path="/counter" element={<Counter />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path='/learning'>
+          <Route path="effect" element={<LearningEffect />} />
+          <Route path="state" element={<LearningState />} />
+          <Route path="ref" element={<LearningRef />} />
+          <Route path="counter" element={<Counter />} />
+        </Route>
       </Route>
       {/* /heroes -> lien absolu */}
       {/* heroes -> lien relatif (il prend le chemin actuel auquel il concatene heroes) */}

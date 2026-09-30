@@ -3,8 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useMutation } from '@tanstack/react-query';
+import { registerUser } from '@/api/users';
+import { toast } from 'react-toastify';
+import { useAuthContext } from '@/context/auth-context';
 
 type RegisterForm = {
   email: string;
@@ -12,14 +16,16 @@ type RegisterForm = {
   confirmPassword: string;
 };
 
-const schema = z.object({
+const schema = z
+  .object({
     email: z.string().email(),
     password: z.string().min(8),
     confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords should match",
-    path: ["confirmPassword"],
-})
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords should match',
+    path: ['confirmPassword'],
+  });
 
 const Register = () => {
   const {
@@ -30,11 +36,23 @@ const Register = () => {
     resolver: zodResolver(schema),
   });
 
-  console.log('Incorrect formdata', errors)
+  const authContext = useAuthContext()
+
+
+  const { isPending, mutate } = useMutation({
+    mutationKey: ['register'],
+    mutationFn: registerUser,
+    onSuccess: (data) => {
+      toast.success(`User ${data.user.email} registered successfully`);
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(`Unable to register: ${error.message}`);
+    },
+  });
 
   const onSubmitHandler: SubmitHandler<RegisterForm> = (data) => {
-    console.log('Succes')
-    console.log(data);
+    mutate({ email: data.email, password: data.password });
   };
 
   return (
@@ -48,11 +66,7 @@ const Register = () => {
           <form className="space-y-5" onSubmit={handleSubmit(onSubmitHandler)}>
             <fieldset className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                {...register('email')}
-              />
+              <Input id="email" type="email" {...register('email')} />
               {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
             </fieldset>
             <fieldset className="space-y-2">
@@ -63,14 +77,21 @@ const Register = () => {
             <fieldset className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <Input id="confirmPassword" type="password" {...register('confirmPassword')} />
-                {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
+              )}
             </fieldset>
             <div>
-              <Button className="w-full" type="submit">
+              <Button className="w-full" type="submit" disabled={isPending}>
                 Sign Up
               </Button>
             </div>
           </form>
+          <Button className="w-full" onClick={() => {
+            authContext.loginContext('generatedEmaill@email.com', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZhYmlvMkBlbWFpbC5jb20iLCJpYXQiOjE3OTA3NTM5MjksImV4cCI6MTc5MDc1NzUyOSwic3ViIjoiMiJ9.NZz4zmO4HzAbhoczsa-nzr2357vHxMr5j42FpOKMLj4')
+          }}>
+            Generate Token
+          </Button>
         </CardContent>
       </Card>
     </section>
