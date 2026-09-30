@@ -1,4 +1,6 @@
+import type { HeroFormData } from '@/pages/AddHero/schema';
 import type { Hero } from '../types/hero';
+import { formDataToHeroMapper } from './utils';
 
 export const getHeroes = (): Promise<Hero[]> => {
   return fetch('http://localhost:3001/heroes')
@@ -34,5 +36,20 @@ export const getHeroesByCriteria = async ({ name, alignment, gender }: { name: s
   const queryString = params.toString();
   const response = await fetch(`http://localhost:3001/heroes?${queryString}`);
   if (!response.ok) throw new Error('Failed to search heroes');
+  return response.json();
+};
+
+
+export const createHero = async (data: HeroFormData): Promise<Hero> => {
+  // transform the form data into a hero
+  const hero = formDataToHeroMapper(data)
+  const response = await fetch('http://localhost:3001/heroes', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(hero),
+  });
+  if (!response.ok) throw new Error('Failed to create hero');
   return response.json();
 };
