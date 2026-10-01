@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useQuery } from '@tanstack/react-query';
 import { SearchIcon, SlidersHorizontal } from 'lucide-react';
-import { useEffect, useRef, useState, type SubmitEvent } from 'react';
+import { useEffect, useRef, type SubmitEvent } from 'react';
 
 const fieldClassName =
   'h-10 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50';
@@ -41,13 +41,6 @@ const Search = () => {
   const onSubmitHandler = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     refetch();
-  };
-
-  const clearSearch = () => {
-    // setName('');
-    // setAlignment('');
-    // setGender('');
-    // search.reset();
   };
 
   return (

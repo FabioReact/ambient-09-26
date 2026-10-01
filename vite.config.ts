@@ -2,7 +2,7 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
-import path, { resolve } from "path"
+import { resolve } from "path"
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -19,7 +19,6 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // "@": path.resolve(__dirname, "./src"),
       "@": resolve(import.meta.dirname, './src'),
     },
   },

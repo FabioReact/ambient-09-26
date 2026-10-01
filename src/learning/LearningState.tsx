@@ -2,10 +2,6 @@ import { useState } from 'react';
 
 const LearningState = () => {
   const [counter, setCounter] = useState(11);
-  const [name, setName] = useState('John');
-  const [colors, setColors] = useState<string[]>(['red', 'blue', 'green']);
-  const [connected, setConnected] = useState(false);
-  const [user, setUser] = useState<{ id: string; name: string } | null>(null);
 
   return (
     <section>

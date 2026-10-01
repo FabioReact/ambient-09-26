@@ -32,7 +32,6 @@ const Login = () => {
     resolver: zodResolver(schema),
   });
 
-  const authContext = useAuthContext()
   const location = useLocation()
   const navigate = useNavigate()
   const { loginContext } = useAuthContext()

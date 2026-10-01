@@ -1,5 +1,4 @@
 import { getHeroesByCriteria } from '@/api/heroes';
-import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 type GenderOptions = 'male' | 'female' | '';
@@ -11,11 +10,6 @@ const Search = () => {
   const [gender, setGender] = useState<GenderOptions>('');
   const [name, setName] = useState('');
   getHeroesByCriteria({ name, alignment: 'good', gender: 'female' });
-
-  const { data: heroes, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['search', name, alignment, gender],
-    queryFn: () => getHeroesByCriteria({ name, alignment, gender }),
-  })
 
   return (
     <section>

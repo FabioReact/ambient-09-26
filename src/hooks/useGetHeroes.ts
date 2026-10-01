@@ -36,7 +36,7 @@ export const useGetHeroes = () => {
       if (data) setHeroes(data);
     } catch (error) {
       setIsError(true);
-      setError(error.message);
+      setError('message');
     } finally {
       setIsLoading(false);
     }

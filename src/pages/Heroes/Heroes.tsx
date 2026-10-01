@@ -1,12 +1,9 @@
 import HeroCard from '@/components/HeroCard';
-import { useGetHeroes } from '@/hooks/useGetHeroes';
 import { useState } from 'react';
 import { generateAlphabet } from './utils';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { getHeroesByFirstLetter } from '@/api/heroes';
-import { IsLoading } from '@/components/IsLoading';
-
 const Skeleton = () => {
   return (
     <div className="max-w-full animate-pulse">
