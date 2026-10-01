@@ -8,7 +8,9 @@ import * as z from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '@/api/users';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '@/context/auth-context';
+import { useAppDispatch } from '@/redux/hooks';
+import { loginRedux } from '@/redux/features/counter/authSlice';
+import { useNavigate } from 'react-router';
 
 type RegisterForm = {
   email: string;
@@ -36,14 +38,18 @@ const Register = () => {
     resolver: zodResolver(schema),
   });
 
-  const authContext = useAuthContext()
-
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { isPending, mutate } = useMutation({
     mutationKey: ['register'],
     mutationFn: registerUser,
     onSuccess: (data) => {
       toast.success(`User ${data.user.email} registered successfully`);
+      dispatch(loginRedux({ email: data.user.email, accessToken: data.accessToken }));
+      setTimeout(() => {
+        navigate('/profile', { replace: true });
+      }, 5000);
     },
     onError: (error) => {
       console.log(error);
@@ -87,11 +93,6 @@ const Register = () => {
               </Button>
             </div>
           </form>
-          <Button className="w-full" onClick={() => {
-            authContext.loginContext('generatedEmaill@email.com', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZhYmlvMkBlbWFpbC5jb20iLCJpYXQiOjE3OTA3NTM5MjksImV4cCI6MTc5MDc1NzUyOSwic3ViIjoiMiJ9.NZz4zmO4HzAbhoczsa-nzr2357vHxMr5j42FpOKMLj4')
-          }}>
-            Generate Token
-          </Button>
         </CardContent>
       </Card>
     </section>

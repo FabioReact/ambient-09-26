@@ -8,20 +8,19 @@ import * as z from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { loginUser } from '@/api/users';
 import { toast } from 'react-toastify';
-import { useAuthContext } from '@/context/auth-context';
 import { useLocation, useNavigate } from 'react-router';
+import { useAppDispatch } from '@/redux/hooks';
+import { loginRedux } from '@/redux/features/counter/authSlice';
 
 type LoginForm = {
   email: string;
   password: string;
 };
 
-const schema = z
-  .object({
-    email: z.string().email(),
-    password: z.string(),
-  })
-
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
 
 const Login = () => {
   const {
@@ -32,18 +31,17 @@ const Login = () => {
     resolver: zodResolver(schema),
   });
 
-  const authContext = useAuthContext()
-  const location = useLocation()
-  const navigate = useNavigate()
-  const { loginContext } = useAuthContext()
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const { isPending, mutate } = useMutation({
     mutationKey: ['login'],
     mutationFn: loginUser,
     onSuccess: (data) => {
-        loginContext(data.user.email, data.accessToken);
-        const nextPage = location.state?.from || '/profile';
-        navigate(nextPage, { replace: true });
+      dispatch(loginRedux({ email: data.user.email, accessToken: data.accessToken }));
+      const nextPage = location.state?.from || '/profile';
+      navigate(nextPage, { replace: true });
     },
 
     onError: (error) => {

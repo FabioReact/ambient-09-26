@@ -1,4 +1,4 @@
-import { useAuthContext } from "@/context/auth-context"
+import { useAppSelector } from "@/redux/hooks"
 import { NavLink, type NavLinkRenderProps } from "react-router"
 
 enum LinkVisibility {
@@ -17,6 +17,7 @@ const links = [
   { to: "/", label: "Home", visibility: LinkVisibility.PUBLIC },
   { to: "/heroes", label: "Heroes", visibility: LinkVisibility.PUBLIC },
   { to: "/search", label: "Search", visibility: LinkVisibility.PUBLIC },
+  { to: "/login", label: "Login", visibility: LinkVisibility.NOT_AUTHENTICATED },
   { to: "/register", label: "Register", visibility: LinkVisibility.NOT_AUTHENTICATED },
   { to: "/battle", label: "Battle", visibility: LinkVisibility.PUBLIC },
   { to: "/profile", label: "Profile", visibility: LinkVisibility.PRIVATE },
@@ -24,7 +25,7 @@ const links = [
 ]
 
 const Navbar = () => {
-  const { connected } = useAuthContext()
+  const connected = useAppSelector((state) => state.auth.connected)
   return (
     <nav className='mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8'>
         {links.filter(link => {
