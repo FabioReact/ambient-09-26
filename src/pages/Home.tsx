@@ -1,11 +1,17 @@
-import Navbar from "../components/Navbar"
+import { increment } from "@/redux/features/counter/counterSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 const Home = () => {
-    return (
-        <>
-            <h1>Home</h1>
-        </>
-    )
-}
+  const count = useAppSelector((state) => state.counter.value);
+  const dispatch = useAppDispatch();
+  
+  return (
+    <>
+      <h1>Home</h1>
+      <p>Redux counter: {count}</p>
+      <button onClick={() => dispatch(increment())}>Increment</button>
+    </>
+  );
+};
 
-export default Home
+export default Home;
