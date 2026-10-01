@@ -3,13 +3,12 @@ import type { Hero } from '@/types/hero';
 import { useState } from 'react';
 import { SelectHero } from './SelectHero';
 import HeroCard from '@/components/HeroCard';
+import { fight } from './utils';
 
 const Battle = () => {
   const [hero, setHero] = useState<Hero | null>(null);
   const [opponent, setOpponent] = useState<Hero | null>(null);
-  //   const winner = fight(hero, opponent);
-  // Si un hero est selectionné, ne plus afficher le formulaire
-  // Apres avoir obtenu le resultat du combat, afficher le gagnant et un bouton pour recommencer un nouveau duel
+  const [winner, setWinner] = useState<Hero | null>(null);
 
   const onSelectHero = (selectedHero: Hero) => {
     setHero(selectedHero);
@@ -17,6 +16,19 @@ const Battle = () => {
 
   const onSelectOpponent = (selectedHero: Hero) => {
     setOpponent(selectedHero);
+  };
+
+  const onFight = () => {
+    if (hero && opponent) {
+      const result = fight(hero, opponent);
+      setWinner(result);
+    }
+  };
+
+  const onReset = () => {
+    setHero(null);
+    setOpponent(null);
+    setWinner(null);
   };
 
   return (
@@ -29,11 +41,18 @@ const Battle = () => {
         </p>
       </div>
       <div className="flex flex-col items-center justify-center gap-6 lg:flex-row lg:items-start">
-        <SelectHero label="Hero" onSelect={onSelectHero} />
+        {!hero && <SelectHero label="Hero" onSelect={onSelectHero} />}
         {hero && <HeroCard hero={hero} />}
-        <SelectHero label="Opponent" onSelect={onSelectOpponent} />
-        {hero && opponent && <Button>Battle</Button>}
+        {hero && opponent && <Button onClick={onFight}>Battle</Button>}
+        {!opponent && <SelectHero label="Opponent" onSelect={onSelectOpponent} />}
+        {opponent && <HeroCard hero={opponent} />}
       </div>
+      {winner && (
+        <div className="text-center">
+          <p className="text-lg font-semibold">The winner is {winner.name}!</p>
+          <Button onClick={onReset}>Play again</Button>
+        </div>
+      )}
     </section>
   );
 };
