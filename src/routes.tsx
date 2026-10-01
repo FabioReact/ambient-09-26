@@ -12,19 +12,24 @@ import { Profile } from './pages/Profile/Profile';
 import { LearningRef } from './learning/LearningRef';
 import { AddHero } from './pages/AddHero/AddHero';
 import Battle from './pages/Battle/Battle';
+import { PrivateRoute } from './hoc/PrivateRoute';
+import { Login } from './pages/Login/Login';
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/exercices" element={<Exercice />} />
         <Route path="/heroes" element={<Heroes />} />
         <Route path="/search" element={<Search />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/add-hero" element={<AddHero />} />
         <Route path="/battle" element={<Battle />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/exercices" element={<Exercice />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
         <Route path='/learning'>
           <Route path="effect" element={<LearningEffect />} />
           <Route path="state" element={<LearningState />} />

@@ -1,14 +1,16 @@
 import { createContext, useContext } from 'react';
 
 type AuthContextType = {
+  connected: boolean;
   accessToken: string;
   email: string;
   loginContext: (email: string, token: string) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
-    accessToken: 'helloWorld',
-    email: 'email@email.com',
+    connected: false,
+    accessToken: '',
+    email: '',
     loginContext: () => {},
 });
 

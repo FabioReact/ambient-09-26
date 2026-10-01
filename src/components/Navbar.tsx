@@ -1,4 +1,11 @@
+import { useAuthContext } from "@/context/auth-context"
 import { NavLink, type NavLinkRenderProps } from "react-router"
+
+enum LinkVisibility {
+  PUBLIC = 'PUBLIC',
+  PRIVATE = 'PRIVATE',
+  NOT_AUTHENTICATED = 'NOT_AUTHENTICATED',
+}
 
 const getActiveClassNames = ({ isActive }: NavLinkRenderProps) => {
   let classnames = 'rounded-lg px-3 py-2 text-sm font-medium transition-colors'
@@ -7,19 +14,25 @@ const getActiveClassNames = ({ isActive }: NavLinkRenderProps) => {
 }
 
 const links = [
-  { to: "/", label: "Home" },
-  { to: "/heroes", label: "Heroes" },
-  { to: "/search", label: "Search" },
-  { to: "/register", label: "Register" },
-  { to: "/battle", label: "Battle" },
-  { to: "/profile", label: "Profile" },
-  { to: "/exercices", label: "Exercices" },
+  { to: "/", label: "Home", visibility: LinkVisibility.PUBLIC },
+  { to: "/heroes", label: "Heroes", visibility: LinkVisibility.PUBLIC },
+  { to: "/search", label: "Search", visibility: LinkVisibility.PUBLIC },
+  { to: "/register", label: "Register", visibility: LinkVisibility.NOT_AUTHENTICATED },
+  { to: "/battle", label: "Battle", visibility: LinkVisibility.PUBLIC },
+  { to: "/profile", label: "Profile", visibility: LinkVisibility.PRIVATE },
+  { to: "/exercices", label: "Exercices", visibility: LinkVisibility.PRIVATE },
 ]
 
 const Navbar = () => {
+  const { connected } = useAuthContext()
   return (
     <nav className='mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8'>
-        {links.map((link) => (
+        {links.filter(link => {
+          if (link.visibility === LinkVisibility.PUBLIC) return true
+          if (link.visibility === LinkVisibility.PRIVATE && connected) return true
+          if (link.visibility === LinkVisibility.NOT_AUTHENTICATED && !connected) return true
+          return false
+        }).map((link) => (
           <NavLink key={link.to} className={getActiveClassNames} to={link.to}>
             {link.label}
           </NavLink>
