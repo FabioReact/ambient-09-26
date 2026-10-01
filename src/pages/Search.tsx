@@ -1,10 +1,10 @@
 import { getHeroesByCriteria } from '@/api/heroes';
-import HeroCard from '@/components/HeroCard';
+import { HeroCard, HeroCardSkeleton } from '@/components/HeroCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useQuery } from '@tanstack/react-query';
 import { SearchIcon, SlidersHorizontal } from 'lucide-react';
-import { useEffect, useRef, useState, type SubmitEvent } from 'react';
+import { useEffect, useRef, type SubmitEvent } from 'react';
 
 const fieldClassName =
   'h-10 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50';
@@ -120,7 +120,9 @@ const Search = () => {
 
       <div aria-live="polite" className="space-y-5">
         {isLoading && (
-          <p className="text-center text-sm text-muted-foreground">Finding matching heroes…</p>
+          <div className="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Array.from({ length: 4 }, (_, index) => <HeroCardSkeleton key={index} />)}
+          </div>
         )}
         {isError && (
           <p
@@ -131,7 +133,7 @@ const Search = () => {
             Search failed. Please try again.
           </p>
         )}
-        {heroes && (
+        {heroes && !isLoading && (
           <>
             <div>
               <h2 className="text-xl font-semibold tracking-tight">Search results</h2>

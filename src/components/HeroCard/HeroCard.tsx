@@ -1,8 +1,8 @@
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Hero } from '@/types/hero';
 import { Link } from 'react-router';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useSquadContext } from '@/context/squad-context';
 
 type HeroCardProps = {
@@ -98,5 +98,7 @@ const HeroCard = ({ hero }: HeroCardProps) => {
     </Card>
   );
 };
+
+
 
 export default HeroCard;

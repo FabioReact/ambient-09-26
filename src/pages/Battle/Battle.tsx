@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import type { Hero } from '@/types/hero';
 import { useState } from 'react';
 import { SelectHero } from './SelectHero';
-import HeroCard from '@/components/HeroCard';
+import { HeroCard } from '@/components/HeroCard';
 import { fight } from './utils';
 
 // Sauvegarder dans redux le hero et l'opponent, et le winner, et la date du combat, pour pouvoir les afficher dans l'historique des combats à afficher sur le profil de l'utilisateur.
