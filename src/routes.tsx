@@ -11,6 +11,7 @@ import { Register } from './pages/Register/Register';
 import { Profile } from './pages/Profile/Profile';
 import { LearningRef } from './learning/LearningRef';
 import { AddHero } from './pages/AddHero/AddHero';
+import Battle from './pages/Battle/Battle';
 
 const AppRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const AppRoutes = () => {
         <Route path="/search" element={<Search />} />
         <Route path="/register" element={<Register />} />
         <Route path="/add-hero" element={<AddHero />} />
+        <Route path="/battle" element={<Battle />} />
         <Route path="/profile" element={<Profile />} />
         <Route path='/learning'>
           <Route path="effect" element={<LearningEffect />} />

@@ -30,7 +30,7 @@ const Heroes = () => {
 
   // const { heroes, isLoading, isError, error, refetch } = useGetHeroes();
   const { data: heroes, isError, isLoading, error, refetch } = useQuery({
-    queryKey: ['heroes', selectedLetter], // heroes/A, heroes/B
+    queryKey: ['heroes', selectedLetter],
     queryFn: () => getHeroesByFirstLetter(selectedLetter)
   })
 

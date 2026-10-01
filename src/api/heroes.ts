@@ -27,6 +27,19 @@ export const getHeroesByFirstLetter = async (letter: string): Promise<Hero[]> =>
     });
 };
 
+export const getHeroesByName = async (name: string): Promise<Hero[]> => {
+  if (!name) return [];
+  return fetch(`http://localhost:3001/heroes?name_like=${name}`)
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+    })
+    .then((data) => {
+      return data;
+    });
+};
+
 export const getHeroesByCriteria = async ({ name, alignment, gender }: { name: string, alignment: string, gender: string }): Promise<Hero[]> => {
   if (!name && !alignment && !gender) return [];
   const params = new URLSearchParams();
