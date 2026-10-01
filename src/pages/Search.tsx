@@ -1,8 +1,7 @@
-import { getHeroesByCriteria } from '@/api/heroes';
 import { HeroCard, HeroCardSkeleton } from '@/components/HeroCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useQuery } from '@tanstack/react-query';
+import { useLazyGetHeroesByCriteriaQuery } from '@/redux/features/apiSlice';
 import { SearchIcon, SlidersHorizontal } from 'lucide-react';
 import { useEffect, useRef, type SubmitEvent } from 'react';
 
@@ -18,20 +17,8 @@ const Search = () => {
     console.log('Nouveau render', Date.now());
   });
 
-  const {
-    data: heroes,
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery({
-    queryKey: ['heroes'],
-    queryFn: () => getHeroesByCriteria({
-      name: nameRef.current?.value || '',
-      alignment: alignmentRef.current?.value || '',
-      gender: genderRef.current?.value || '',
-    }),
-    enabled: false,
-  });
+  const [search, { data: heroes, isLoading, isError }] = useLazyGetHeroesByCriteriaQuery()
+
 
   // Si enabled: false, alors on ne doit pas passer à queryKey les valeurs de nameRef, alignmentRef et genderRef dans le queryKey, car cela empeche de declencher le refetch() avec les nouvelles valeurs
   //  queryKey: ['heroes'],
@@ -40,14 +27,11 @@ const Search = () => {
 
   const onSubmitHandler = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    refetch();
-  };
-
-  const clearSearch = () => {
-    // setName('');
-    // setAlignment('');
-    // setGender('');
-    // search.reset();
+    search({
+      name: nameRef.current?.value || '',
+      alignment: alignmentRef.current?.value || '',
+      gender: genderRef.current?.value || '',
+    });
   };
 
   return (
@@ -110,9 +94,7 @@ const Search = () => {
               <Button type="submit" size="lg" disabled={false} className="min-w-32">
                 <SearchIcon /> {isLoading ? 'Searching…' : 'Search heroes'}
               </Button>
-              {/* {(name || alignment || gender) && (
-                <Button type="button" variant="ghost" size="lg" onClick={clearSearch}><X /> Clear filters</Button>
-              )} */}
+                <Button type="reset" variant="ghost" size="lg" >Clear filters</Button>
             </div>
           </form>
         </CardContent>

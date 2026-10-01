@@ -14,10 +14,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { useMutation } from '@tanstack/react-query';
-import { createHero } from '@/api/heroes';
 import { toast } from 'react-toastify';
 import { MultipleCombobox } from '@/components/MultipleCombobox';
+import { useCreateHeroMutation } from '@/redux/features/apiSlice';
+import { formDataToHeroMapper } from '@/api/utils';
 
 const alignmentOptions = [
   { value: 'good', label: 'Good' },
@@ -40,19 +40,16 @@ const AddHero = () => {
     resolver: zodResolver(heroSchema),
   });
 
-  const { mutate } = useMutation({
-    mutationKey: ['create-hero'],
-    mutationFn: createHero,
-    onSuccess: (data) => {
-      toast.success(`Hero ${data.name} created successfully`);
-    },
-    onError: (error) => {
-      toast.error(`Unable to create hero: ${error.message}`);
-    },
-  });
+  const [createHero] = useCreateHeroMutation();
 
-  const onSubmitHandler: SubmitHandler<HeroFormData> = (data) => {
-    mutate(data);
+  const onSubmitHandler: SubmitHandler<HeroFormData> = async (data) => {
+    const hero = formDataToHeroMapper(data)
+    try {
+      await createHero(hero).unwrap();
+      toast.success(`Hero ${hero.name} created successfully`);
+    } catch (error) {
+      toast.error(`Unable to create hero: ${JSON.stringify(error)}`);
+    }
   };
 
   return (

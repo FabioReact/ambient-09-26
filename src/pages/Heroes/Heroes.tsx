@@ -2,21 +2,17 @@ import { HeroCard, HeroCardSkeleton } from '@/components/HeroCard';
 import { useState } from 'react';
 import { generateAlphabet } from './utils';
 import { Button } from '@/components/ui/button';
-import { useQuery } from '@tanstack/react-query';
-import { getHeroesByFirstLetter } from '@/api/heroes';
+import { useGetHeroesByFirstLetterQuery } from '@/redux/features/apiSlice';
 
 const alphabet = generateAlphabet();
 
 const Heroes = () => {
   const [selectedLetter, setSelectedLetter] = useState('A');
 
-  const { data: heroes, isError, isLoading, error, refetch } = useQuery({
-    queryKey: ['heroes', selectedLetter],
-    queryFn: () => getHeroesByFirstLetter(selectedLetter)
-  })
+  const { data: heroes, isError, isLoading, isFetching, refetch } = useGetHeroesByFirstLetterQuery(selectedLetter)
 
   const onClickHandler = (letter: string) => {
-    setSelectedLetter(letter); // state update
+    setSelectedLetter(letter);
     refetch();
   };
 
@@ -39,11 +35,11 @@ const Heroes = () => {
           </li>
         ))}
       </ul>
-      {isError && <p className="text-red-500 text-sm">An error occured... Reason: {error.message}</p>}
+      {isError && <p className="text-red-500 text-sm">An error occured...</p>}
       {heroes?.length === 0 && !isLoading && !isError && 'No results'}
       <section className="flex justify-center">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-5">
-          {isLoading && Array.from({ length: 4 }, (_, index) => <HeroCardSkeleton key={index} />)}
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-5 ${isFetching ? 'opacity-50' : ''}`}>
+          {(isLoading) && Array.from({ length: 4 }, (_, index) => <HeroCardSkeleton key={index} />)}
           {heroes?.map((hero) => (
             <HeroCard key={hero.id} hero={hero} />
           ))}
