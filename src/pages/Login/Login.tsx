@@ -10,7 +10,7 @@ import { loginUser } from '@/api/users';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router';
 import { useAppDispatch } from '@/redux/hooks';
-import { loginRedux } from '@/redux/features/counter/authSlice';
+import { loginRedux } from '@/redux/features/auth/authSlice';
 
 type LoginForm = {
   email: string;

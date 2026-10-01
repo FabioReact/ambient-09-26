@@ -4,14 +4,15 @@ import { useState } from 'react';
 import { SelectHero } from './SelectHero';
 import { HeroCard } from '@/components/HeroCard';
 import { fight } from './utils';
-
-// Sauvegarder dans redux le hero et l'opponent, et le winner, et la date du combat, pour pouvoir les afficher dans l'historique des combats à afficher sur le profil de l'utilisateur.
-// Ne sauvegarder que si l'utilisateur est connecté, sinon ne rien faire.
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { addBattleRecord } from '@/redux/features/battle/battleSlice';
 
 const Battle = () => {
   const [hero, setHero] = useState<Hero | null>(null);
   const [opponent, setOpponent] = useState<Hero | null>(null);
   const [winner, setWinner] = useState<Hero | null>(null);
+  const connected = useAppSelector(state => state.auth.connected);
+  const dispatch = useAppDispatch()
 
   const onSelectHero = (selectedHero: Hero) => {
     setHero(selectedHero);
@@ -24,6 +25,16 @@ const Battle = () => {
   const onFight = () => {
     if (hero && opponent) {
       const result = fight(hero, opponent);
+      if (connected) {
+        const date = new Date()
+        dispatch(addBattleRecord({
+          heroName: hero.name,
+          opponentName: opponent.name,
+          winner: result.name,
+          date: date.toLocaleDateString('fr-FR'),
+          // date: Temporal.Now.toString(),
+        }));
+      }
       setWinner(result);
     }
   };

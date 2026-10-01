@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '@/api/users';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from '@/redux/hooks';
-import { loginRedux } from '@/redux/features/counter/authSlice';
+import { loginRedux } from '@/redux/features/auth/authSlice';
 import { useNavigate } from 'react-router';
 
 type RegisterForm = {
